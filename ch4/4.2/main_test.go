@@ -5,6 +5,24 @@ import (
 	"testing"
 )
 
+func TestNonEmpty(t *testing.T) {
+	tests := []struct {
+		a    []string
+		want []string
+	}{
+		{
+			[]string{"a", "", "b"},
+			[]string{"a", "b"},
+		},
+	}
+
+	for _, v := range tests {
+		if got := NonEmpty(v.a); !StringSliceEqual(got, v.want) {
+			t.Errorf("%q -> %q, want: %q", v.a, got, v.want)
+		}
+	}
+}
+
 func TestRotate(t *testing.T) {
 	tests := []struct {
 		a    []int
@@ -60,9 +78,16 @@ func TestAppendInt(t *testing.T) {
 	}
 
 	for _, v := range tests {
-		if got := appendInt(v.a, v.b); !Equal(got, v.want) {
+		if got := AppendInt(v.a, v.b); !Equal(got, v.want) {
 			fmt.Printf("%v append %d get %v, want %v", v.a, v.b, got, v.want)
 		}
+	}
+
+	var x, y []int
+	for i := 0; i < 10; i++ {
+		y = AppendInt(x, i)
+		fmt.Printf("i=%d cap=%d y=%d\n", i, cap(y), y)
+		x = y
 	}
 }
 

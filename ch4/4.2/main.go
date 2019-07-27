@@ -58,20 +58,47 @@ func main() {
 	fmt.Printf("%q\n", runes)
 }
 
-func appendInt(x []int, y int) []int {
+// 移除第 i 个元素，并保留剩余元素的顺序
+func Remove(s []int, i int) []int {
+	copy(s[i:], s[i+1:])
+	return s[:len(s)-1]
+}
+
+// 移除第 i 个元素，不需要保留剩余元素的顺序
+func Remove1(s []int, i int) []int {
+	s[i] = s[len(s)-1]
+	return s[:len(s)-1]
+}
+
+func NonEmpty(s []string) []string {
+	j := 0
+	for _, v := range s {
+		if v != "" {
+			s[j] = v
+			j++
+		}
+	}
+	return s[:j]
+}
+
+// 重写针对 int slice 的 append 函数
+func AppendInt(x []int, y ...int) []int {
 	var z []int
-	zlen := len(x) + 1
+	zlen := len(x) + len(y)
 	xcap := cap(x)
 
 	if xcap >= zlen {
 		z = x[:zlen]
-		z[zlen-1] = y
-		return z
+	} else {
+		zcap := zlen
+		if zcap < xcap*2 {
+			zcap = xcap * 2
+		}
+		z = make([]int, zlen, zcap)
+		copy(z, x)
 	}
 
-	z = make([]int, zlen, xcap*2)
-	copy(z, x)
-	z[zlen-1] = y
+	copy(z[len(x):], y)
 	return z
 }
 
@@ -79,12 +106,14 @@ func printSliceLenCap(s []string) {
 	fmt.Printf("s=%v, len=%d, cap=%d, isNil=%t\n", s, len(s), cap(s), s == nil)
 }
 
+// 把一个 int slice 逆序
 func Reverse(s []int) {
 	for i, j := 0, len(s)-1; i < j; i, j = i+1, j-1 {
 		s[i], s[j] = s[j], s[i]
 	}
 }
 
+// 判断两个 int slice 是否相等
 func Equal(a []int, b []int) bool {
 	if len(a) != len(b) {
 		return false
@@ -97,6 +126,19 @@ func Equal(a []int, b []int) bool {
 	return true
 }
 
+func StringSliceEqual(a []string, b []string) bool {
+	if len(a) != len(b) {
+		return false
+	}
+	for i := 0; i < len(a); i++ {
+		if a[i] != b[i] {
+			return false
+		}
+	}
+	return true
+}
+
+// 把一个 int slice rotate n 位
 func Rotate(a []int, n int) {
 	n = n % len(a)
 	Reverse(a[:n])
