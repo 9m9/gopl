@@ -1,6 +1,8 @@
 package main
 
 import (
+	"abel-abel/gopl/ch4/equal"
+	"abel-abel/gopl/ch4/slice"
 	"fmt"
 	"testing"
 )
@@ -17,7 +19,7 @@ func TestNonEmpty(t *testing.T) {
 	}
 
 	for _, v := range tests {
-		if got := NonEmpty(v.a); !StringSliceEqual(got, v.want) {
+		if got := slice.NonEmpty(v.a); !equal.StringSliceEqual(got, v.want) {
 			t.Errorf("%q -> %q, want: %q", v.a, got, v.want)
 		}
 	}
@@ -48,7 +50,7 @@ func TestRotate(t *testing.T) {
 	for _, v := range tests {
 		originA := make([]int, len(v.a), len(v.a))
 		copy(originA, v.a)
-		if Rotate(v.a, v.b); !Equal(v.a, v.want) {
+		if slice.Rotate(v.a, v.b); !equal.Equal(v.a, v.want) {
 			t.Errorf("%v rotate %d -> %v, want %v", originA, v.b, v.a, v.want)
 		}
 	}
@@ -78,14 +80,14 @@ func TestAppendInt(t *testing.T) {
 	}
 
 	for _, v := range tests {
-		if got := AppendInt(v.a, v.b); !Equal(got, v.want) {
+		if got := slice.AppendInt(v.a, v.b); !equal.Equal(got, v.want) {
 			fmt.Printf("%v append %d get %v, want %v", v.a, v.b, got, v.want)
 		}
 	}
 
 	var x, y []int
 	for i := 0; i < 10; i++ {
-		y = AppendInt(x, i)
+		y = slice.AppendInt(x, i)
 		fmt.Printf("i=%d cap=%d y=%d\n", i, cap(y), y)
 		x = y
 	}
@@ -117,7 +119,7 @@ func TestReverse(t *testing.T) {
 		var originA []int = make([]int, len(v.a), len(v.a))
 		copy(originA, v.a)
 		// fmt.Printf("originA=%v, v.a=%v, v.want=%v\n", originA, v.a, v.want)
-		if Reverse(v.a[:]); !Equal(v.a, v.want) {
+		if slice.Reverse(v.a[:]); !equal.Equal(v.a, v.want) {
 			t.Errorf("%v reversed: %v, want %q", originA, v.a, v.want)
 		}
 		// fmt.Printf("originA=%v, v.a=%v, v.want=%v\n", originA, v.a, v.want)
